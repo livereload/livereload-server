@@ -22,6 +22,10 @@ class LRWebSocketConnection extends EventEmitter
       debug "LRWebSocketConnection(#{@id}) received #{data}"
       @parser.received(data)
 
+    @socket.on 'error', (err) =>
+      debug "LRWebSocketConnection(#{@id}) got an error #{err}"
+      @emit 'error', err
+
     @socket.on 'close', =>
       (clearTimeout @_handshakeTimeout; @_handshakeTimeout = null) if @_handshakeTimeout
       @emit 'disconnected'
